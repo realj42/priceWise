@@ -43,7 +43,7 @@ export async function GET() {
 
                   // send emails
                   const emailNotifType = await getEmailNotifType(scrapedProduct,currentProduct);
-                  if (emailNotifType && updatedProduct.users.length > 0) {
+                  if (emailNotifType && newProduct.users.length > 0) {
                       const productInfo = {
                           title: updatedProduct.title,
                           url: updatedProduct.url,
