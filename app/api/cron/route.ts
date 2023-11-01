@@ -5,6 +5,8 @@ import {getAveragePrice, getEmailNotifType, getHighestPrice, getLowestPrice} fro
 import {revalidatePath} from "next/cache";
 import {generateEmailBody, sendEmail} from "@/lib/nodemailer";
 import {NextResponse} from "next/server";
+import {Schema} from "mongoose";
+import Date = module
 
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
@@ -25,9 +27,13 @@ export async function GET() {
               } else {
 
                   const updatedPriceHistory = [ ...currentProduct.priceHistory,
-                      {currentPrice: scrapedProduct.currentPrice}
+                      {
+                          price: scrapedProduct.priceHistory.price,
+                          date: new Date(),
+                      }
                   ];
                   let updatedProduct = {
+                      ...currentProduct,
                       ...scrapedProduct,
                       priceHistory: updatedPriceHistory,
                       lowestPrice: getLowestPrice(updatedPriceHistory),
@@ -36,7 +42,7 @@ export async function GET() {
                   }
 
                   const newProduct = await Product.findOneAndUpdate(
-                      { url: scrapedProduct.url},
+                      { url: currentProduct.url},
                       updatedProduct,
                   );
                   //revalidatePath(`/products/${newProduct._id}`)
