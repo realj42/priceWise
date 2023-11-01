@@ -6,7 +6,6 @@ import {revalidatePath} from "next/cache";
 import {generateEmailBody, sendEmail} from "@/lib/nodemailer";
 import {NextResponse} from "next/server";
 import {Schema} from "mongoose";
-import Date = module
 
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
@@ -28,8 +27,8 @@ export async function GET() {
 
                   const updatedPriceHistory = [ ...currentProduct.priceHistory,
                       {
-                          price: scrapedProduct.priceHistory.price,
-                          date: new Date(),
+                          price: scrapedProduct.priceHistory[0].price,
+                          date: Date.now(),
                       }
                   ];
                   let updatedProduct = {
